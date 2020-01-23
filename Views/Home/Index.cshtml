@@ -7,6 +7,7 @@
 @{
     ViewData["Title"] = "Weather";
 }
+@model WeatherInformation
 
 
 <div class="text-center">
@@ -24,13 +25,19 @@
         }
     }
     <input id="city-search" type="text" placeholder="Search for a city">
+    <form asp-controller="Home" asp-action="CitySearch" method="post">
+        <input type="hidden" id=city name ="city" value="" />
+        <input type="hidden" id=country name ="country" value="" />
+        <button type="submit">Submit</button>
+    </form>
 
+ 
 
     <script>
         let autocomplete;
 
         let input = document.querySelector("#city-search");
-        function initAutoComplete() {
+        window.onload = function initAutoComplete() {
             autocomplete = new google.maps.places.Autocomplete(input, { type: ['geocode'] });
 
             autocomplete.addListener('place_changed', () => {
@@ -39,15 +46,18 @@
                     window.alert("No details available for input: '" + place.name + "'");
                     return;
                 }
+                let location = place.address_components;
+                console.log(location[0]);
+                console.log(location[location.length - 1]);
+               
+                document.getElementById("city").value = location[0].short_name;
+                document.getElementById("country").value = location[location.length - 1].short_name;
 
-                console.log(place.geometry.viewport.Ya.i)
-                console.log(place.geometry.viewport.Ta.i)
+
             })
         }
 
-        initAutoComplete();
+
     </script>
-
-
 
 </div>

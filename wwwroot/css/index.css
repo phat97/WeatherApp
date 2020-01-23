@@ -1,9 +1,9 @@
 ﻿body {
-    display:inline;
+    box-sizing: border-box
 }
 
 #city-search {
-    width: 400px;  
+    width: 600px;  
 }
 
 

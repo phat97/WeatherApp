@@ -50,11 +50,25 @@ namespace Weather.Controllers
             return View(indexPath, weatherInformation);
         }
 
+        [HttpPost]
+        public IActionResult CitySearch(string city, string country)
+        {
+
+            string uri = openWeatherUri +"q=" + city + "," + country +"&appid=6a918a2e7455032b8e29775f764b46df";
+
+            var client = new HttpClient();
+            var data = client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
+
+            weatherInformation = JsonConvert.DeserializeObject<WeatherInformation>(data);
+            return View(indexPath, weatherInformation);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
 
         private IpInfo GetUserLocationDetailsyByIp(string ip)
         {
