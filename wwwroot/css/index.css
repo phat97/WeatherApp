@@ -2,7 +2,8 @@
     display:inline;
 }
 
-#city-search { 
+#city-search {
+    width: 400px;  
 }
 
 

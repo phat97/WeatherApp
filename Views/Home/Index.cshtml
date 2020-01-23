@@ -1,23 +1,53 @@
-﻿
+﻿@section Scripts
+{
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDE-cJNq9CyHprNdBtww_wzdVB-yblzHDI&libraries=places"></script>
+    <link rel="stylesheet" href="~/css/index.css" />
+}
+
 @{
     ViewData["Title"] = "Weather";
 }
 
 
-    <div class="text-center">
-        @{
-            if (Model == null)
-            {
-                <h1>Something went wrong</h1>
-            }
-            else
-            {
-                <h1>@Model.name</h1>
-                <p>@Model.weather[0].description</p>
-                string icon = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
-                <img src="@icon" />
-            }
+<div class="text-center">
+    @{
+        if (Model == null)
+        {
+            <h1>Something went wrong</h1>
         }
-        <br />
-        <input id="city-search" type="text" placeholder="Search..">
-    </div>
+        else
+        {
+            <h1>@Model.name</h1>
+            <p>@Model.weather[0].description</p>
+            string icon = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
+            <img src="@icon" />
+        }
+    }
+    <input id="city-search" type="text" placeholder="Search for a city">
+
+
+    <script>
+        let autocomplete;
+
+        let input = document.querySelector("#city-search");
+        function initAutoComplete() {
+            autocomplete = new google.maps.places.Autocomplete(input, { type: ['geocode'] });
+
+            autocomplete.addListener('place_changed', () => {
+                let place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                }
+
+                console.log(place.geometry.viewport.Ya.i)
+                console.log(place.geometry.viewport.Ta.i)
+            })
+        }
+
+        initAutoComplete();
+    </script>
+
+
+
+</div>
