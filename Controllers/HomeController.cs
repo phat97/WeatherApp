@@ -37,14 +37,21 @@ namespace Weather.Controllers
 
             if(ipDetails.Longitude == null)
             {
-                uri = "http://api.openweathermap.org/data/2.5/weather?q=Surrey,ca&appid=6a918a2e7455032b8e29775f764b46df";
+                uri = "http://api.openweathermap.org/data/2.5/weather?q=Surrey,ca&units=metric&appid=6a918a2e7455032b8e29775f764b46df";
             } else
             {
-                uri = openWeatherUri + "lat=" + ipDetails.Latitude + "&lon=" + ipDetails.Longitude + "&appid=6a918a2e7455032b8e29775f764b46df";
+                uri = openWeatherUri + "lat=" + ipDetails.Latitude + "&lon=" + ipDetails.Longitude + "&units=metric&appid=6a918a2e7455032b8e29775f764b46df";
             }
 
             var client = new HttpClient();
-            var data = client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
+
+            var response = client.GetAsync(uri).Result;
+            if(!response.IsSuccessStatusCode)
+            {
+                return View(indexPath);
+            }
+
+            var data = response.Content.ReadAsStringAsync().Result;
 
             weatherInformation = JsonConvert.DeserializeObject<WeatherInformation>(data);
             return View(indexPath, weatherInformation);
@@ -54,10 +61,22 @@ namespace Weather.Controllers
         public IActionResult CitySearch(string city, string country)
         {
 
-            string uri = openWeatherUri +"q=" + city + "," + country +"&appid=6a918a2e7455032b8e29775f764b46df";
+            string uri = openWeatherUri + "q=" + city + "," + country + "&units=metric&appid=6a918a2e7455032b8e29775f764b46df";
+
+
+
+
+
 
             var client = new HttpClient();
-            var data = client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
+            var response = client.GetAsync(uri).Result;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return View(indexPath);
+            }
+
+            var data = response.Content.ReadAsStringAsync().Result;
 
             weatherInformation = JsonConvert.DeserializeObject<WeatherInformation>(data);
             return View(indexPath, weatherInformation);

@@ -3,61 +3,369 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDE-cJNq9CyHprNdBtww_wzdVB-yblzHDI&libraries=places"></script>
     <link rel="stylesheet" href="~/css/index.css" />
 }
+@model WeatherInformation
 
 @{
     ViewData["Title"] = "Weather";
 }
-@model WeatherInformation
 
+<div class="text-center container">
+    <div class="blur background"></div>
+    <h1>Today's Forecast</h1>
 
-<div class="text-center">
-    @{
-        if (Model == null)
-        {
-            <h1>Something went wrong</h1>
+    <div class="container-search">
+        <input id="city-search" type="text" placeholder="Search for a city">
+        <form asp-controller="Home" asp-action="CitySearch" method="post">
+            <input type="hidden" id=city name="city" value="" />
+            <input type="hidden" id=country name="country" value="" />
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="weather-info">
+
+        @{
+            if (Model == null)
+            {
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/dark_ocean.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                <h1>Something went wrong</h1>
+                <h3>Try a different location</h3>
+            }
+            else
+            {
+                <h3>@Model.name</h3>
+                <h3>@Model.sys.country</h3>
+                <p>@Model.main.temp &#8451;</p>
+                <p>@Model.weather[0].description</p>
+
+                string icon = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
+
+                <img src="@icon" />
+                <br />
+                <h1>@Model.weather[0].main</h1>
+
+            }
         }
-        else
+    </div>
+</div>
+
+<script>
+    let autocomplete;
+
+    let input = document.querySelector("#city-search");
+    window.onload = () => {
+        autocomplete = new google.maps.places.Autocomplete(input, { type: ['cities'] });
+
+        autocomplete.addListener('place_changed', () => {
+            let place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+            let location = place.address_components;
+            console.log(location[0]);
+            console.log(location[location.length - 1]);
+
+            document.getElementById("city").value = location[0].long_name;
+            document.getElementById("country").value = location[location.length - 1].short_name;
+
+
+        })
+    }
+</script>
+
+
+@{
+    if (Model != null)
+    {
+        switch (@Model.weather[0].main)
         {
-            <h1>@Model.name</h1>
-            <p>@Model.weather[0].description</p>
-            string icon = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
-            <img src="@icon" />
+            case "Thunderstorm":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/thunderstorm.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Drizzle":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/drizzle.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Rain":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/rain.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Snow":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/snow.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Clear":
+                @section BackgroundImage {
+                    <style type="text/css">
+                     .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/clear.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Clouds":
+
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/clouds.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Mist":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/mist.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Smoke":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/smoke.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Haze":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/haze.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Dust":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/dust.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Fog":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/fog.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Sand":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/sand.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                }
+                break;
+            case "Ash":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/ash.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                } break;
+            case "Squall":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/squall.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                } break;
+            case "Tornado":
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/tornado.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+                    </style>
+                } break;
+            default:
+                @section BackgroundImage {
+                    <style type="text/css">
+                    .background:after {
+                        content: "";
+                        background: url(@Url.Content("~/image/weather/default.jpg")) no-repeat center center fixed;
+                        background-size: cover;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        position: absolute;
+                        z-index: -1;
+                    }
+
+                    </style>
+                }
+                break;
         }
     }
-    <input id="city-search" type="text" placeholder="Search for a city">
-    <form asp-controller="Home" asp-action="CitySearch" method="post">
-        <input type="hidden" id=city name ="city" value="" />
-        <input type="hidden" id=country name ="country" value="" />
-        <button type="submit">Submit</button>
-    </form>
 
- 
-
-    <script>
-        let autocomplete;
-
-        let input = document.querySelector("#city-search");
-        window.onload = function initAutoComplete() {
-            autocomplete = new google.maps.places.Autocomplete(input, { type: ['geocode'] });
-
-            autocomplete.addListener('place_changed', () => {
-                let place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    window.alert("No details available for input: '" + place.name + "'");
-                    return;
-                }
-                let location = place.address_components;
-                console.log(location[0]);
-                console.log(location[location.length - 1]);
-               
-                document.getElementById("city").value = location[0].short_name;
-                document.getElementById("country").value = location[location.length - 1].short_name;
-
-
-            })
-        }
-
-
-    </script>
-
-</div>
+}
