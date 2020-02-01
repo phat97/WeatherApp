@@ -2,6 +2,9 @@
 {
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDE-cJNq9CyHprNdBtww_wzdVB-yblzHDI&libraries=places"></script>
     <link rel="stylesheet" href="~/css/index.css" />
+    <link rel="stylesheet" href="~/css/weather-icons.min.css" />
+    <link rel="stylesheet" href="~/css/weather-icons-wind.min.css" />
+
 }
 @model WeatherInformation
 
@@ -11,10 +14,10 @@
 
 <div class="text-center container">
     <div class="blur background"></div>
-    <h1>Today's Forecast</h1>
+    <p class="heading">Today's Forecast</p>
 
     <div class="container-search">
-        <input id="city-search" type="text" placeholder="Search for a city">
+        <input id="city-search" type="text" placeholder="  Search for a city">
         <form asp-controller="Home" asp-action="CitySearch" method="post">
             <input type="hidden" id=city name="city" value="" />
             <input type="hidden" id=country name="country" value="" />
@@ -47,17 +50,10 @@
             }
             else
             {
-                <h3>@Model.name</h3>
-                <h3>@Model.sys.country</h3>
+                <p class="location_title">@Model.name, @Model.sys.country</p>
                 <p>@Model.main.temp &#8451;</p>
                 <p>@Model.weather[0].description</p>
-
-                string icon = "http://openweathermap.org/img/wn/" + Model.weather[0].icon + "@2x.png";
-
-                <img src="@icon" />
-                <br />
-                <h1>@Model.weather[0].main</h1>
-
+                <i class="wi wi-fw" id="weather_icon"></i>
             }
         }
     </div>
@@ -92,7 +88,7 @@
 @{
     if (Model != null)
     {
-        switch (@Model.weather[0].main)
+        switch (Model.weather[0].main)
         {
             case "Thunderstorm":
                 @section BackgroundImage {
@@ -109,6 +105,11 @@
                         z-index: -1;
                     }
                     </style>
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-thunderstorm");
+                    </script>
                 }
                 break;
             case "Drizzle":
@@ -127,6 +128,11 @@
                     }
                     </style>
                 }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-showers");
+                    </script>
+                }
                 break;
             case "Rain":
                 @section BackgroundImage {
@@ -143,6 +149,11 @@
                         z-index: -1;
                     }
                     </style>
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-rain");
+                    </script>
                 }
                 break;
             case "Snow":
@@ -161,6 +172,11 @@
                     }
                     </style>
                 }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-snow");
+                    </script>
+                }
                 break;
             case "Clear":
                 @section BackgroundImage {
@@ -177,6 +193,11 @@
                         z-index: -1;
                     }
                     </style>
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-day-sunny");
+                    </script>
                 }
                 break;
             case "Clouds":
@@ -196,6 +217,11 @@
                     }
                     </style>
                 }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-cloudy");
+                    </script>
+                }
                 break;
             case "Mist":
                 @section BackgroundImage {
@@ -212,6 +238,11 @@
                         z-index: -1;
                     }
                     </style>
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-fog");
+                    </script>
                 }
                 break;
             case "Smoke":
@@ -230,6 +261,11 @@
                     }
                     </style>
                 }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-smoke");
+                    </script>
+                }
                 break;
             case "Haze":
                 @section BackgroundImage {
@@ -246,6 +282,11 @@
                         z-index: -1;
                     }
                     </style>
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-fog");
+                    </script>
                 }
                 break;
             case "Dust":
@@ -264,6 +305,11 @@
                     }
                     </style>
                 }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-dust");
+                    </script>
+                }
                 break;
             case "Fog":
                 @section BackgroundImage {
@@ -280,6 +326,11 @@
                         z-index: -1;
                     }
                     </style>
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-fog");
+                    </script>
                 }
                 break;
             case "Sand":
@@ -298,6 +349,11 @@
                     }
                     </style>
                 }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-sandstorm");
+                    </script>
+                }
                 break;
             case "Ash":
                 @section BackgroundImage {
@@ -314,7 +370,13 @@
                         z-index: -1;
                     }
                     </style>
-                } break;
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-volcano");
+                    </script>
+                }
+                break;
             case "Squall":
                 @section BackgroundImage {
                     <style type="text/css">
@@ -330,7 +392,13 @@
                         z-index: -1;
                     }
                     </style>
-                } break;
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-thunderstorm");
+                    </script>
+                }
+                break;
             case "Tornado":
                 @section BackgroundImage {
                     <style type="text/css">
@@ -346,7 +414,13 @@
                         z-index: -1;
                     }
                     </style>
-                } break;
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-tornado");
+                    </script>
+                }
+                break;
             default:
                 @section BackgroundImage {
                     <style type="text/css">
@@ -363,6 +437,11 @@
                     }
 
                     </style>
+                }
+                @section WeatherIcon {
+                    <script>
+                        document.querySelector("#weather_icon").classList.add("wi-na");
+                    </script>
                 }
                 break;
         }
