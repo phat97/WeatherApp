@@ -13,17 +13,21 @@
 }
 
 <div class="text-center container">
+
     <div class="blur background"></div>
     <p class="heading">Today's Forecast</p>
+    <form class="container-search" asp-controller="Home" asp-action="CitySearch" method="post">
+        <input type="hidden" id=city name="city" value="" />
+        <input type="hidden" id=country name="country" value="" />
 
-    <div class="container-search">
-        <input id="city-search" type="text" placeholder="  Search for a city">
-        <form asp-controller="Home" asp-action="CitySearch" method="post">
-            <input type="hidden" id=city name="city" value="" />
-            <input type="hidden" id=country name="country" value="" />
-            <button type="submit">Search</button>
-        </form>
-    </div>
+        <div class="search-box">
+            <input class="search-input" id="city-search" type="text" placeholder="Search for a city" >
+            <button class="search-button" type="submit" onmouseover="open_search()">
+                <i class="material-icons" >search</i>
+            </button>
+        </div>
+
+    </form>
 
     <div class="weather-info">
 
@@ -34,7 +38,7 @@
                     <style type="text/css">
                     .background:after {
                         content: "";
-                        background: url(@Url.Content("~/image/weather/dark_ocean.jpg")) no-repeat center center fixed;
+                        background: url(@Url.Content("~/image/weather/error.jpg")) no-repeat center center fixed;
                         background-size: cover;
                         top: 0;
                         left: 0;
@@ -45,13 +49,13 @@
                     }
                     </style>
                 }
-                <h1>Something went wrong</h1>
-                <h3>Try a different location</h3>
+                <p>Something went wrong</p>
+                <p>Try a different location</p>
             }
             else
             {
                 <p class="location_title">@Model.name, @Model.sys.country</p>
-                <p>@Model.main.temp &#8451;</p>
+                <p>Temperature: @Model.main.temp &#8451;</p>
                 <p>@Model.weather[0].description</p>
                 <i class="wi wi-fw" id="weather_icon"></i>
             }
@@ -73,14 +77,18 @@
                 return;
             }
             let location = place.address_components;
-            console.log(location[0]);
-            console.log(location[location.length - 1]);
 
             document.getElementById("city").value = location[0].long_name;
             document.getElementById("country").value = location[location.length - 1].short_name;
 
 
         })
+    }
+
+    function open_search() {
+        element = document.querySelector(".search-input");
+        element.style.width = "350px";
+        element.style.padding = "0 10px";
     }
 </script>
 
