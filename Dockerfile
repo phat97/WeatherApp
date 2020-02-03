@@ -12,5 +12,5 @@ RUN dotnet publish -c Release -o out
 # final stage/image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=build-env /app/out .
 CMD dotnet Weather.dll
