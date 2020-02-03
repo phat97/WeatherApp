@@ -68,7 +68,7 @@
 
     let input = document.querySelector("#city-search");
     window.onload = () => {
-        autocomplete = new google.maps.places.Autocomplete(input, { type: ['cities'] });
+        autocomplete = new google.maps.places.Autocomplete(input, { type: ['cities']});
 
         autocomplete.addListener('place_changed', () => {
             let place = autocomplete.getPlace();
