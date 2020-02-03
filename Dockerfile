@@ -1,4 +1,4 @@
-﻿FROM microsoft/dotnet: 3.1.100-sdk AS build-env
+﻿FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
@@ -9,8 +9,8 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Build runtime image
-FROM microsoft/dotnet:3.1.0-aspnetcore-runtime
+# final stage/image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build-env /app/out .
 CMD dotnet Weather.dll
